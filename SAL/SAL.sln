@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAL", "SAL\SAL.csproj", "{8DF4BC43-0A17-4B95-B648-AD2A5CDC75CF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8DF4BC43-0A17-4B95-B648-AD2A5CDC75CF}.Debug|x86.ActiveCfg = Debug|x86
+		{8DF4BC43-0A17-4B95-B648-AD2A5CDC75CF}.Debug|x86.Build.0 = Debug|x86
+		{8DF4BC43-0A17-4B95-B648-AD2A5CDC75CF}.Release|x86.ActiveCfg = Release|x86
+		{8DF4BC43-0A17-4B95-B648-AD2A5CDC75CF}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AE0F3991-F4B8-426A-9888-37978F033D2D}
+	EndGlobalSection
+EndGlobal
