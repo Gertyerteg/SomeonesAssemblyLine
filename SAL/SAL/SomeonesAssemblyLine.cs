@@ -1,18 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SAL.Etc;
 
 namespace SAL
 {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class SomeonesAssemblyLine : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        public Game1()
+        public SomeonesAssemblyLine()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -26,7 +27,13 @@ namespace SAL
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            // initializes and adds the fps counter component. TODO: temporary presence
+            FPSCounter counter = new FPSCounter(this, CornerPosition.TOP_LEFT);
+            Components.Add(counter);
+
+            GameManager.GetInstance().Initialize();
+
+            IsMouseVisible = true;
 
             base.Initialize();
         }
@@ -39,8 +46,7 @@ namespace SAL
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            
         }
 
         /// <summary>
@@ -49,7 +55,6 @@ namespace SAL
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
         }
 
         /// <summary>
