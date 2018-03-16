@@ -24,14 +24,29 @@ namespace SAL
         /// Loads game-necessary assets. A different instance of a contentmanager is necessary
         /// for easier organization of unloading assets.
         /// </summary>
-        public ContentManager Content;
+        public ContentManager Content
+        {
+            get;
+            private set;
+        }
+
+        private SomeonesAssemblyLine GameInstance;
 
         /// <summary>
         /// Creates a new instance of the <c>GameState</c>.
         /// </summary>
-        public GameState()
+        public GameState(SomeonesAssemblyLine inst)
         {
+            GameInstance = inst;
+        }
 
+        /// <summary>
+        /// The game instance of the game.
+        /// </summary>
+        /// <returns></returns>
+        public SomeonesAssemblyLine GetInstance()
+        {
+            return GameInstance;
         }
 
         /// <summary>
