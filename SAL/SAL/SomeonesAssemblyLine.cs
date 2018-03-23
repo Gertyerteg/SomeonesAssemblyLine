@@ -13,6 +13,9 @@ namespace SAL
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        /// <summary>
+        /// Creates a new instance of the <c>SomeonesAssemblyLine</c> game instance.
+        /// </summary>
         public SomeonesAssemblyLine()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -31,7 +34,12 @@ namespace SAL
             FPSCounter counter = new FPSCounter(this, CornerPosition.TOP_LEFT);
             Components.Add(counter);
 
-            GameManager.GetInstance().Initialize();
+            Window.Title = "Someone's Assembly Line Version 0.0.1";
+
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 720;
+
+            graphics.ApplyChanges();
 
             IsMouseVisible = true;
 
@@ -46,7 +54,10 @@ namespace SAL
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
+            // initializes the game manager
+            GameManager.GetInstance().Initialize(this);
+
         }
 
         /// <summary>
@@ -67,7 +78,7 @@ namespace SAL
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            GameManager.GetInstance().Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -80,7 +91,7 @@ namespace SAL
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            GameManager.GetInstance().Draw(spriteBatch, GraphicsDevice);
 
             base.Draw(gameTime);
         }

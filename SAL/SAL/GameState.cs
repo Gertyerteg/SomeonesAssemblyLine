@@ -2,7 +2,7 @@
  * Spencer Chang
  * 15 March 2018
  * 
- * A parent class for game instances. (Think of this object as different states of the game!)
+ * A parent class for game instances. (Think of this object as different states of the game)
  */
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -57,6 +57,8 @@ namespace SAL
         {
             // initializes the contentmanager within the folder "Content"
             this.Content = new ContentManager(Content.ServiceProvider, "Content");
+
+            Load();
         }
 
         /// <summary>
@@ -64,8 +66,16 @@ namespace SAL
         /// </summary>
         public virtual void Unload()
         {
-            // unloads this instance of the content manager.
+            // unloads this instance of the content manager
             Content.Unload();
+        }
+
+        /// <summary>
+        /// Loads the game state's assets after the contentmanager's initialization.
+        /// </summary>
+        public virtual void Load()
+        {
+
         }
 
         /// <summary>
