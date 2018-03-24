@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using SAL.Components;
 
 namespace SAL.GameStates
@@ -24,7 +25,18 @@ namespace SAL.GameStates
         private List<Component> components;
         private Selector selector;
 
+        /// <summary>
+        /// User information holder for the player's progress.
+        /// </summary>
+        public GameProfile User;
+
         private Camera camera;
+        private Vector2 initMouseClick;
+        private SpriteFont font;
+        private bool isMouseMovingCamera;
+        private Texture2D blank, tileBorder;
+
+        private int width, height;
 
         /// <summary>
         /// Creates and initializes a new instance of <c>MainState</c>
@@ -34,6 +46,18 @@ namespace SAL.GameStates
         {
             camera = new Camera(inst.GraphicsDevice.Viewport);
             components = new List<Component>();
+
+            initMouseClick = Vector2.Zero;
+            isMouseMovingCamera = false;
+
+            width = 100;
+            height = 80;
+
+            User = new GameProfile
+            {
+                Money = 1200.0102f
+            };
+
         }
 
         /// <summary>
@@ -44,6 +68,9 @@ namespace SAL.GameStates
             base.Load();
 
             Texture2D texture = GameManager.GetInstance().GetTexture("Conveyer_Belt");
+            blank = GameManager.GetInstance().GetTexture("Blank");
+            tileBorder = GameManager.GetInstance().GetTexture("TileBorder");
+            font = Content.Load<SpriteFont>("Temp Font");
 
             selector = new Selector();
             selector.LoadContent(Content);
@@ -87,7 +114,44 @@ namespace SAL.GameStates
             foreach (Component c in components)
                 c.Update(gameTime);
 
+            // checks if the user is dragging mouse to move the camera
+            if (InputManager.Instance.leftMouseButtonDown() && !isMouseMovingCamera)
+            {
+                initMouseClick = Mouse.GetState().Position.ToVector2();
+                isMouseMovingCamera = true;
+            }
+            else if (!InputManager.Instance.leftMouseButtonDown())
+            {
+                isMouseMovingCamera = false;
+            }
+
+            float factor = 0.05f;
+            if (InputManager.Instance.isScrollingUp())
+                camera.ChangeZoom(-factor);
+            else if (InputManager.Instance.isScrollingDown())
+                camera.ChangeZoom(factor);
+
+            if (isMouseMovingCamera)
+            {
+                camera.LookAt(camera.Position + (initMouseClick - Mouse.GetState().
+                    Position.ToVector2()) / Math.Max(0.001f, camera.Zoom));
+                initMouseClick = Mouse.GetState().Position.ToVector2();
+            }
+
+            // moves the camera with keys
+            Vector2 cameraVel = Vector2.Zero;
+            float camSpeed = 7f;
+            if (InputManager.Instance.KeyDown(Keys.W))
+                cameraVel.Y -= camSpeed;
+            if (InputManager.Instance.KeyDown(Keys.S))
+                cameraVel.Y += camSpeed;
+            if (InputManager.Instance.KeyDown(Keys.A))
+                cameraVel.X -= camSpeed;
+            if (InputManager.Instance.KeyDown(Keys.D))
+                cameraVel.X += camSpeed;
+
             selector.Update(gameTime, camera);
+            camera.LookAt(camera.Position + cameraVel);
         }
 
         /// <summary>
@@ -99,12 +163,39 @@ namespace SAL.GameStates
         {
             base.Draw(spriteBatch, graphics);
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
+                SamplerState.PointClamp, null, null, null, camera.GetMatrixView());
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    Rectangle dRect = new Rectangle(x * 64, y * 64, 64, 64);
+                    spriteBatch.Draw(blank, dRect, Color.White);
+                    spriteBatch.Draw(tileBorder, dRect, Color.White);
+                }
+            }
 
             foreach (Component c in components)
                 c.Draw(spriteBatch);
 
             selector.Draw(spriteBatch);
+
+            spriteBatch.End();
+
+            spriteBatch.Begin();
+
+            string money = String.Format("{0:0.##}", User.Money);
+            if (User.Money >= 1000)
+            {
+                money = String.Format("{0:0.#} K", User.Money / 1000);
+            }
+            else if (User.Money >= 1000000)
+            {
+                money = String.Format("{0:0.#} M", User.Money / 1000000);
+            }
+
+            spriteBatch.DrawString(font, "$" + money, new Vector2(100, 100), Color.White);
 
             spriteBatch.End();
         }

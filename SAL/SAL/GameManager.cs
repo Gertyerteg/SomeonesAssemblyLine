@@ -143,6 +143,8 @@ namespace SAL
         public void Update(GameTime gameTime)
         {
             state.Update(gameTime);
+
+            InputManager.Instance.Update();
         }
 
         /// <summary>

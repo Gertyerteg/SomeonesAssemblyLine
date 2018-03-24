@@ -68,8 +68,8 @@ namespace SAL
             //else
             //{
             for (int i = 0; i < drawRectangles.Length; i++)
-                drawRectangles[i] = new Rectangle((Mouse.GetState().X / 64) * 64,
-                    (Mouse.GetState().Y / 64) * 64, 64, 64);
+                drawRectangles[i] = new Rectangle((int)(Mouse.GetState().RelativePosition(camera).X / 64) * 64,
+                    (int)(Mouse.GetState().RelativePosition(camera).Y / 64) * 64, 64, 64);
             //}
         }
 
