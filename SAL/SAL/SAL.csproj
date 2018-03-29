@@ -48,6 +48,8 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\ConveyorBelt.cs" />
+    <Compile Include="Components\Producer.cs" />
+    <Compile Include="Components\Resource.cs" />
     <Compile Include="Etc\CornerPosition.cs" />
     <Compile Include="Etc\FPSCounter.cs" />
     <Compile Include="GameProfile.cs" />
@@ -71,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Conveyer_Belt.png" />
+    <Content Include="Content\Producer.png" />
     <Content Include="Content\Selector.png" />
     <Content Include="Content\SelectorBL.png" />
     <Content Include="Content\SelectorBR.png" />

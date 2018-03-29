@@ -5,6 +5,8 @@
  * The main state of the game. This is where most of the game components will function: Draw
  * and Update.
  */
+
+#region Using Statements
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SAL.Components;
+#endregion
 
 namespace SAL.GameStates
 {
@@ -22,7 +25,15 @@ namespace SAL.GameStates
     /// </summary>
     public class MainState : GameState
     {
-        private List<Component> components;
+        /// <summary>
+        /// The components of the assembly line.
+        /// </summary>
+        public List<Component> Components;
+
+        /// <summary>
+        /// The resources produced by the assembly line.
+        /// </summary>
+        public List<Resource> Resources;
         private Selector selector;
 
         /// <summary>
@@ -45,7 +56,9 @@ namespace SAL.GameStates
             : base(inst)
         {
             camera = new Camera(inst.GraphicsDevice.Viewport);
-            components = new List<Component>();
+            Components = new List<Component>();
+
+            Resources = new List<Resource>();
 
             initMouseClick = Vector2.Zero;
             isMouseMovingCamera = false;
@@ -68,6 +81,7 @@ namespace SAL.GameStates
             base.Load();
 
             Texture2D texture = GameManager.GetInstance().GetTexture("Conveyer_Belt");
+            Texture2D producer = GameManager.GetInstance().GetTexture("Producer");
             blank = GameManager.GetInstance().GetTexture("Blank");
             tileBorder = GameManager.GetInstance().GetTexture("TileBorder");
             font = Content.Load<SpriteFont>("Temp Font");
@@ -82,10 +96,11 @@ namespace SAL.GameStates
                 Dimensions = new Point(64, 64),
                 Position = new Vector2(0, 64)
             };
-            ConveyorBelt a = new ConveyorBelt
+            Producer a = new Producer(1000f, this)
             {
-                Texture = texture,
-                Direction = Direction.NORTH,
+                Texture = producer,
+                IsProducing = true,
+                Direction = Direction.SOUTH,
                 Dimensions = new Point(64, 64),
                 Position = new Vector2(0, 0)
             };
@@ -98,9 +113,9 @@ namespace SAL.GameStates
                 Position = new Vector2(0, 128)
             };
 
-            components.Add(a);
-            components.Add(b);
-            components.Add(c);
+            Components.Add(a);
+            Components.Add(b);
+            Components.Add(c);
         }
 
         /// <summary>
@@ -111,8 +126,11 @@ namespace SAL.GameStates
         {
             base.Update(gameTime);
 
-            foreach (Component c in components)
+            foreach (Component c in Components)
                 c.Update(gameTime);
+
+            foreach (Resource r in Resources)
+                r.Update(gameTime);
 
             // checks if the user is dragging mouse to move the camera
             if (InputManager.Instance.leftMouseButtonDown() && !isMouseMovingCamera)
@@ -176,8 +194,11 @@ namespace SAL.GameStates
                 }
             }
 
-            foreach (Component c in components)
+            foreach (Component c in Components)
                 c.Draw(spriteBatch);
+
+            foreach (Resource r in Resources)
+                r.Draw(spriteBatch);
 
             selector.Draw(spriteBatch);
 
